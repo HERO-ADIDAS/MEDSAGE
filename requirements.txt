@@ -1,0 +1,6 @@
+pandas
+langchain
+faiss-gpu
+sentence-transformers
+torch
+rank-bm25
