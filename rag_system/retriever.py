@@ -1,7 +1,4 @@
-# ============================================================
 # Imports
-# ============================================================
-
 import pickle
 import os
 from langchain_community.vectorstores import FAISS
@@ -9,12 +6,9 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from rank_bm25 import BM25Okapi
 from sentence_transformers import CrossEncoder
 import numpy as np
-from collections import defaultdict  # Used for Reciprocal Rank Fusion (RRF) scoring
+from collections import defaultdict  
 
-
-# ============================================================
 # Configuration Constants
-# ============================================================
 
 VECTOR_STORE_PATH = "rag_system/vector_store"
 BM25_INDEX_PATH = "rag_system/vector_store/bm25_index.pkl"
@@ -22,20 +16,10 @@ LOCAL_EMBEDDING_MODEL = "./all-MiniLM-L6-v2"
 CROSS_ENCODER_MODEL = 'cross-encoder/ms-marco-MiniLM-L-6-v2'
 RRF_K = 60  # Constant used in Reciprocal Rank Fusion scoring, typical value
 
-
-# ============================================================
 # Advanced Retriever Class implementing Hybrid Search
-# ============================================================
 
 class AdvancedRetriever:
     def __init__(self):
-        """
-        Initialize the retriever by loading all necessary models and indexes:
-        - Local embedding model for FAISS vectors
-        - FAISS vector store
-        - BM25 index and associated documents
-        - Cross-encoder model for re-ranking
-        """
         print("Loading local retriever components...")
 
         # Load embedding model for vector representations
@@ -60,19 +44,7 @@ class AdvancedRetriever:
         print("Retriever loaded successfully.")
 
     def search(self, query: str, k_retrieve: int = 50, k_rerank: int = 25, k_final: int = 5) -> str:
-        """
-        Perform a hybrid semantic and keyword search with Reciprocal Rank Fusion (RRF),
-        followed by re-ranking using a Cross-Encoder, and return top-k final documents as context.
 
-        Args:
-            query (str): The input query string.
-            k_retrieve (int): Number of documents to fetch initially from each search method.
-            k_rerank (int): Number of top documents to re-rank with the Cross-Encoder.
-            k_final (int): Number of top documents to return as the final result.
-
-        Returns:
-            str: Combined top document texts, separated by delimiters, as the retrieved context.
-        """
         print(f"[Retriever] Performing hybrid search with RRF for: '{query}'")
 
         # --- 1. Retrieve candidates from FAISS vector store (semantic search) ---
