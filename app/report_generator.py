@@ -1,22 +1,13 @@
-# ============================================================
 # Imports
-# ============================================================
-
 from fpdf import FPDF, XPos, YPos
 import datetime
 from app.nim_client import get_nim_llm
 from app import prompts
 from langchain_core.output_parsers import StrOutputParser
 
-# ============================================================
 # PDF Report Class Extending FPDF
-# ============================================================
-
 class PDF(FPDF):
     def header(self):
-        """
-        Create a custom header for each PDF page with branding.
-        """
         self.set_fill_color(14, 165, 233)  # Blue background fill
         self.set_text_color(255, 255, 255)  # White text
         self.set_font('Helvetica', 'B', 16)
@@ -27,9 +18,6 @@ class PDF(FPDF):
         self.ln(3)
 
     def footer(self):
-        """
-        Custom footer showing page number and disclaimer.
-        """
         self.set_y(-20)
         self.set_font('Helvetica', 'I', 8)
         self.set_text_color(100, 100, 100)
@@ -43,9 +31,6 @@ class PDF(FPDF):
         self.set_text_color(0, 0, 0)
 
     def section_title(self, title):
-        """
-        Adds a styled section title to the PDF.
-        """
         self.ln(2)
         self.set_font('Helvetica', 'B', 13)
         self.set_fill_color(230, 240, 250)  # Light blue background
@@ -53,15 +38,9 @@ class PDF(FPDF):
         self.ln(3)
 
     def clean_text(self, text):
-        """
-        Remove markdown markers like ** for clean display.
-        """
         return text.replace('**', '')
 
     def section_body(self, text):
-        """
-        Adds paragraph text body to the PDF, cleaned from markdown.
-        """
         clean = self.clean_text(text)
         self.set_font('Helvetica', '', 10)
         self.set_text_color(50, 50, 50)
@@ -69,9 +48,6 @@ class PDF(FPDF):
         self.ln(2)
 
     def key_value(self, key, value):
-        """
-        Prints a key-value pair with styled keys for patient info.
-        """
         self.set_font('Helvetica', 'B', 10)
         self.set_text_color(14, 165, 233)  # Blue keys
         self.cell(w=50, h=6, text=key + ":", border=0, new_x=XPos.RIGHT, new_y=YPos.TOP, align='L')
@@ -82,25 +58,8 @@ class PDF(FPDF):
         self.multi_cell(w=0, h=6, text=value_str, border=0, align='L', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         self.ln(1)
 
-# ============================================================
 # Function to Generate PDF Report Bytes from Chat History and User Details
-# ============================================================
-
 def generate_report_pdf(user_details: dict | None, chat_history: list) -> bytes:
-    """
-    Generate a polished PDF report summarizing the diagnostic session.
-
-    Args:
-        user_details: Optional dict or Pydantic model with patient info.
-        chat_history: List of chat turns containing human and AI messages.
-
-    Returns:
-        bytes representing the PDF file content.
-
-    Raises:
-        ValueError: If chat history is empty.
-    """
-
     # Build full conversation string from chat history
     full_history_str = ""
     for turn in chat_history:
