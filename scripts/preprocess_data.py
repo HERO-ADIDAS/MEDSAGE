@@ -1,33 +1,20 @@
-# ============================================================
-# Imports
-# ============================================================
 
+# Imports
 import pandas as pd
 import xml.etree.ElementTree as ET
 import os
-
-# ============================================================
 # Configuration
-# ============================================================
-
 # List of raw data directories to process; currently contains approved folder only
 RAW_DATA_DIRS = [
     "data/raw/4_MPlus_Health_Topics_QA"
 ]
-
 # Output path for combined processed CSV
 PROCESSED_DATA_PATH = "data/processed/medsage_processed.csv"
 
-# ============================================================
 # Main Preprocessing Function
-# ============================================================
 
 def preprocess_medquad_xml_recursive():
-    """
-    Recursively searches for all XML files in the specified data directories,
-    extracts question-answer pairs along with associated metadata (focus topic,
-    semantic types, synonyms), and combines all data into a single CSV file.
-    """
+
     all_rows = []
 
     # Traverse all directories in RAW_DATA_DIRS
@@ -96,9 +83,6 @@ def preprocess_medquad_xml_recursive():
     df.to_csv(PROCESSED_DATA_PATH, index=False)
     print("Preprocessing complete.")
 
-# ============================================================
-# Execution guard
-# ============================================================
 
 if __name__ == "__main__":
     preprocess_medquad_xml_recursive()
