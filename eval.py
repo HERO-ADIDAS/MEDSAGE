@@ -1,6 +1,5 @@
-# ============================================================
+
 # Imports
-# ============================================================
 
 import pandas as pd
 from rag_system.retriever import AdvancedRetriever
@@ -9,9 +8,7 @@ import re
 from difflib import SequenceMatcher  # Imported but not currently used
 from sentence_transformers import SentenceTransformer, util
 
-# ============================================================
 # Constants and Configuration
-# ============================================================
 
 embedding_model = SentenceTransformer('./all-MiniLM-L6-v2')  # Load embedding model once
 COSINE_SIM_THRESHOLD = 0.85  # Threshold for semantic cosine similarity
@@ -19,15 +16,9 @@ EVAL_DATA_PATH = "eval.csv"  # Evaluation data filepath
 K = 10  # Number of top documents to consider in metrics
 SIMILARITY_THRESHOLD = 0.9  # For SequenceMatcher (optional, currently unused)
 
-
-# ============================================================
 # Utility Functions
-# ============================================================
 
 def normalize_text(text: str) -> str:
-    """
-    Normalize text by lowercasing, stripping, reducing whitespace, and removing some punctuation.
-    """
     if not isinstance(text, str):
         return ""
     text = text.lower().strip()
@@ -37,20 +28,7 @@ def normalize_text(text: str) -> str:
 
 
 def calculate_metrics(retrieved_docs: list[str], relevant_docs: list[str], k: int, query_index: int) -> tuple[int, float]:
-    """
-    Calculate Hit Rate and Mean Reciprocal Rank (MRR) for one query.
-    Uses cosine similarity of embeddings with threshold defined globally.
-    
-    Args:
-        retrieved_docs: List of retrieved document texts.
-        relevant_docs: List of expected relevant document texts.
-        k: Top-k cutoff for evaluation.
-        query_index: Index for logging/debugging.
-    
-    Returns:
-        hit (int): 1 if any retrieved doc matches relevant docs semantically, 0 otherwise.
-        reciprocal_rank (float): Reciprocal rank of first matching document or 0 if none found.
-    """
+
     hit = 0
     reciprocal_rank = 0.0
     top_k_retrieved = retrieved_docs[:k]
@@ -91,15 +69,10 @@ def calculate_metrics(retrieved_docs: list[str], relevant_docs: list[str], k: in
 
     return hit, reciprocal_rank
 
-# ============================================================
 # Main Evaluation Function
-# ============================================================
 
 def evaluate_retriever():
-    """
-    Loads evaluation queries and relevant documents, uses AdvancedRetriever to retrieve,
-    compares results using semantic cosine similarity metrics, and prints overall Hit Rate and MRR.
-    """
+
     print("Loading retriever...")
     try:
         retriever = AdvancedRetriever()
@@ -167,11 +140,6 @@ def evaluate_retriever():
     print(f"Hit Rate@{K}: {hit_rate:.2f}%")
     print(f"MRR@{K}: {mrr:.4f}")
     print(f"Total Evaluation Time: {end_time - start_time:.2f} seconds")
-
-
-# ============================================================
-# Main Execution Guard
-# ============================================================
 
 if __name__ == "__main__":
     evaluate_retriever()
