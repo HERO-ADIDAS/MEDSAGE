@@ -1,6 +1,5 @@
-# ============================================================
+
 # Imports
-# ============================================================
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import Response, JSONResponse
@@ -13,9 +12,7 @@ from app.facilities_service import FacilitiesService
 import datetime
 import traceback
 
-# ============================================================
 # Pydantic Models for API Requests/Responses
-# ============================================================
 
 class ChatRequest(BaseModel):
     query: str
@@ -45,9 +42,7 @@ class GetNearestFacilitiesRequest(BaseModel):
 class ExtractSpecialistRequest(BaseModel):
     chat_history: List[dict]
 
-# ============================================================
 # Initialize Router and Diagnostic Engine
-# ============================================================
 
 router = APIRouter()
 
@@ -59,24 +54,12 @@ except Exception as e:
     print(f"FATAL: Failed to initialize DiagnosticEngine: {e}")
     raise RuntimeError(f"Engine initialization failed: {e}") from e
 
-# ============================================================
-# Endpoint: Extract Specialist from Chat History
-# Route: /api/extract_specialist
-# Method: POST
-# ============================================================
+
 
 @router.post("/extract_specialist",
              summary="Extract recommended specialist from chat history")
 async def extract_specialist(request: ExtractSpecialistRequest):
-    """
-    Extracts the recommended specialist from the chat history.
-    Example:
-      {
-          "chat_history": [
-              {"human": "I have fever", "ai": "Based on your symptoms...Recommended Specialist: Cardiologist"}
-          ]
-      }
-    """
+
     print(f"[API /extract_specialist] Extracting specialist from {len(request.chat_history)} messages")
     try:
         specialist = FacilitiesService.extract_specialist_from_chat(request.chat_history)
@@ -98,11 +81,9 @@ async def extract_specialist(request: ExtractSpecialistRequest):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
-# ============================================================
-# Endpoint: Receive and Store Patient Info
-# Route: /api/patient
-# Method: POST
-# ============================================================
+
+
+
 
 @router.post("/patient", summary="Receive and store patient information")
 async def patient_info(request: PatientInfo):
@@ -121,11 +102,6 @@ async def patient_info(request: PatientInfo):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Failed to process patient info: {e}")
 
-# ============================================================
-# Endpoint: Diagnostic Conversation (AI Chat)
-# Route: /api/chat
-# Method: POST
-# ============================================================
 
 @router.post("/chat",
              response_model=ChatResponse,
@@ -156,11 +132,6 @@ async def chat(request: ChatRequest):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Internal Server Error processing chat: {e}")
 
-# ============================================================
-# Endpoint: Generate PDF Summary of Chat Session
-# Route: /api/generate_report
-# Method: POST
-# ============================================================
 
 @router.post("/generate_report",
              summary="Generate a PDF summary of the chat session",
@@ -193,11 +164,6 @@ async def generate_report(request: ReportRequest):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Failed to generate PDF report: {e}")
 
-# ============================================================
-# Endpoint: Get Nearest Medical Facilities
-# Route: /api/get_nearest_facilities
-# Method: POST
-# ============================================================
 
 @router.post("/get_nearest_facilities",
              summary="Get nearest medical facilities by pincode")
@@ -233,11 +199,6 @@ async def get_nearest_facilities(request: GetNearestFacilitiesRequest):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
-# ============================================================
-# Endpoint: List Available Pincodes
-# Route: /api/available_pincodes
-# Method: GET
-# ============================================================
 
 @router.get("/available_pincodes",
             summary="Get list of available pincodes")
@@ -255,11 +216,6 @@ async def available_pincodes():
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
-# ============================================================
-# Endpoint: API Health Check
-# Route: /api/health
-# Method: GET
-# ============================================================
 
 @router.get("/health", summary="Health check endpoint")
 async def health_check():
