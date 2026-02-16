@@ -1,7 +1,4 @@
-# ============================================================
 # Imports
-# ============================================================
-
 import pandas as pd
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -10,25 +7,16 @@ import pickle
 import os
 import time
 
-# ============================================================
 # Configuration Paths and Parameters
-# ============================================================
-
 PROCESSED_DATA_PATH = "data/processed/medsage_processed.csv"
 VECTOR_STORE_PATH = "rag_system/vector_store"
 BM25_INDEX_PATH = "rag_system/vector_store/bm25_index.pkl"
 # Path to the local embedding model
 LOCAL_EMBEDDING_MODEL = "./all-MiniLM-L6-v2"
 
-# ============================================================
 # Main Function: Build and Save Indexes
-# ============================================================
 
 def build_and_save_indices():
-    """
-    Reads processed data and creates both a FAISS vector index (GPU-based)
-    and a BM25 keyword index, then saves them locally.
-    """
 
     # Check if processed data exists
     if not os.path.exists(PROCESSED_DATA_PATH):
