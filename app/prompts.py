@@ -1,13 +1,7 @@
-# ============================================================
 # Imports
-# ============================================================
-
 from langchain_core.prompts import PromptTemplate
 
-# ============================================================
 # Diagnostic Prompt Template
-# ============================================================
-
 DIAGNOSTIC_PROMPT_TEMPLATE = """
 You are a virtual medical assistant trained to reason through patient symptoms to identify possible causes and guide them toward the appropriate medical specialist.
 
@@ -64,10 +58,8 @@ DIAGNOSTIC_PROMPT = PromptTemplate(
     template=DIAGNOSTIC_PROMPT_TEMPLATE
 )
 
-# ============================================================
-# Input Classification Prompt Template
-# ============================================================
 
+# Input Classification Prompt Template
 CLASSIFICATION_PROMPT_TEMPLATE = """
 Analyze the last user message in the context of the last AI question.
 Classify the user's input based ONLY on whether it introduces NEW potential symptoms or significant diagnostic details not previously discussed. Ignore simple affirmations, negations, or direct answers to the question asked.
@@ -88,10 +80,7 @@ CLASSIFICATION_PROMPT = PromptTemplate(
     template=CLASSIFICATION_PROMPT_TEMPLATE
 )
 
-# ============================================================
 # PDF Report Summary Prompt Template
-# ============================================================
-
 SUMMARY_PROMPT_TEMPLATE = """
 You are a medical scribe summarizing a patient's interaction with an AI diagnostic assistant (MedSage) for a healthcare professional.
 Review the entire conversation history provided below.
