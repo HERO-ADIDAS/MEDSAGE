@@ -1,18 +1,14 @@
-# ============================================================
 # Imports
-# ============================================================
 
 from rag_system.retriever import AdvancedRetriever
 from app.nim_client import get_nim_llm
 from app import prompts
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda, RunnableBranch
 from langchain_core.output_parsers import StrOutputParser
-import re  # Import regex for simple rule-based checks
+import re 
 
-# ============================================================
 # DiagnosticEngine Class
 # Main class for handling diagnostic logic and LCEL chain creation
-# ============================================================
 
 class DiagnosticEngine:
     def __init__(self):
@@ -26,9 +22,6 @@ class DiagnosticEngine:
         self.retriever = AdvancedRetriever()
         print("Engine initialized. Ready for requests.")
 
-    # ============================================================
-    # Helper Methods
-    # ============================================================
 
     def _format_history(self, chat_history: list) -> str:
         """
@@ -80,10 +73,10 @@ class DiagnosticEngine:
         print(f"[DEBUG] Classified as {classification_result} (LLM)")
         return classification_result
 
-    # ============================================================
+
     # Main Chain Creation
     # Creates the LCEL chain with conditional retrieval logic
-    # ============================================================
+
 
     def get_chain(self):
         """
