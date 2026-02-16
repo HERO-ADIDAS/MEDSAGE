@@ -1,7 +1,4 @@
-# ============================================================
 # Imports
-# ============================================================
-
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,16 +8,10 @@ from dotenv import load_dotenv
 import os
 import sys
 
-# ============================================================
 # Load Environment Variables
-# ============================================================
-
 load_dotenv()
 
-# ============================================================
 # Create FastAPI Application
-# ============================================================
-
 app = FastAPI(
     title="MedSage Diagnostic AI Backend",
     description="AI-Powered Medical Diagnostic Assistant with Hospital Finder",
@@ -30,10 +21,7 @@ app = FastAPI(
     openapi_url="/api/openapi.json"
 )
 
-# ============================================================
 # Configure CORS Middleware
-# ============================================================
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allow all origins for local dev
@@ -42,17 +30,11 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
 )
 
-# ============================================================
 # Include API Routes
-# ============================================================
-
 # ✅ Register API router FIRST (before static files)
 app.include_router(api_router, prefix="/api")
 
-# ============================================================
 # API Health & Status Endpoints
-# ============================================================
-
 @app.get("/", tags=["Root"])
 async def read_root():
     """Root endpoint - returns API info."""
@@ -105,12 +87,8 @@ async def api_status():
         }
     }
 
-# ============================================================
 # Static Files (Optional - Frontend)
-# ============================================================
-
 # Mount static files AFTER API routes so API takes precedence
-
 static_dir_path = os.path.join(os.path.dirname(__file__), "..", "static")
 
 if os.path.exists(static_dir_path) and os.path.isdir(static_dir_path):
@@ -123,10 +101,7 @@ else:
     print(f"ℹ️  Info: Static directory not found at '{static_dir_path}'")
     print("   Frontend will be served via separate development server (e.g., npm run dev)")
 
-# ============================================================
 # Startup & Shutdown Events
-# ============================================================
-
 @app.on_event("startup")
 async def startup_event():
     """Called when FastAPI server starts."""
@@ -145,10 +120,7 @@ async def shutdown_event():
     """Called when FastAPI server shuts down."""
     print("\n MedSage Server shutting down...\n")
 
-# ============================================================
 # Error Handlers
-# ============================================================
-
 @app.exception_handler(Exception)
 async def general_exception_handler(request, exc):
     """Handle uncaught exceptions gracefully."""
@@ -159,10 +131,7 @@ async def general_exception_handler(request, exc):
         "type": type(exc).__name__
     }
 
-# ============================================================
 # Run Server (if executed as script)
-# ============================================================
-
 if __name__ == "__main__":
     print("\n Starting MedSage Backend Server...\n")
     # Development mode server launch
